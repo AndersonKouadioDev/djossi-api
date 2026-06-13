@@ -67,6 +67,18 @@ enum UserStatus {
   suspended
 }
 
+enum SupportTicketStatus {
+  open
+  pending
+  resolved
+  closed
+}
+
+enum SupportSender {
+  user
+  support
+}
+
 // ---------- Modèles ----------
 
 model User {
@@ -93,6 +105,7 @@ model User {
   devices         Device[]
   reportsAuthored Report[]       @relation("ReportsAuthored")
   reportsReceived Report[]       @relation("ReportsReceived")
+  supportTickets  SupportTicket[]
 
   @@map("users")
 }
@@ -347,4 +360,32 @@ model Device {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("devices")
+}
+
+model SupportTicket {
+  id        String              @id @default(cuid())
+  userId    String              @map("user_id")
+  subject   String
+  status    SupportTicketStatus @default(open)
+  createdAt DateTime            @default(now()) @map("created_at")
+  updatedAt DateTime            @updatedAt @map("updated_at")
+
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages SupportMessage[]
+
+  @@index([userId, createdAt])
+  @@map("support_tickets")
+}
+
+model SupportMessage {
+  id        String        @id @default(cuid())
+  ticketId  String        @map("ticket_id")
+  sender    SupportSender
+  body      String
+  createdAt DateTime      @default(now()) @map("created_at")
+
+  ticket SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId, createdAt])
+  @@map("support_messages")
 }
