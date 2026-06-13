@@ -101,6 +101,12 @@ export class NotificationsService {
     return { count: result.count };
   }
 
+  /**
+   * Enregistre/rafraîchit le device d'un utilisateur. On se contente de
+   * stocker le token : l'envoi FCM réel se fera plus tard via le PushPort
+   * (cf. `notify()` → `push.sendToUser`), dont l'adapter prod résoudra les
+   * Devices de l'utilisateur pour pousser le message.
+   */
   async registerDevice(
     userId: string,
     fcmToken: string,
@@ -113,6 +119,15 @@ export class NotificationsService {
       update: { userId, platform: platform ?? null, lastSeenAt: new Date() },
     });
     return { id: device.id };
+  }
+
+  /**
+   * Désenregistre un device (déconnexion / révocation du token).
+   * Idempotent et borné à l'utilisateur courant : on n'efface jamais le
+   * token d'un autre compte, et un token déjà absent ne lève pas d'erreur.
+   */
+  async unregisterDevice(userId: string, fcmToken: string): Promise<void> {
+    await this.prisma.device.deleteMany({ where: { userId, fcmToken } });
   }
 }
 

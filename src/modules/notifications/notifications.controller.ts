@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -12,6 +13,7 @@ import {
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -83,5 +85,16 @@ export class NotificationsController {
       dto.fcm_token,
       dto.platform,
     );
+  }
+
+  @Delete('devices/:token')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Désenregistre le token FCM de l’appareil.' })
+  @ApiNoContentResponse()
+  unregisterDevice(
+    @CurrentUser() user: AuthUser,
+    @Param('token') token: string,
+  ): Promise<void> {
+    return this.notifications.unregisterDevice(user.id, token);
   }
 }
