@@ -31,6 +31,16 @@ export const envSchema = z.object({
   PAYMENT_MOCK_AUTOCOMPLETE_MS: z.coerce.number().int().min(0).default(3000),
   UPLOAD_DIR: z.string().default('./uploads'),
 
+  // Stockage des fichiers (avatars, portfolio). "local" par défaut : disque
+  // local servi sur /uploads. "s3" active l'adaptateur S3-compatible
+  // (nécessite les variables S3_* ci-dessous).
+  STORAGE_DRIVER: z.enum(['local', 's3']).default('local'),
+  S3_ENDPOINT: z.string().url().optional(),
+  S3_BUCKET: z.string().optional(),
+  S3_REGION: z.string().optional(),
+  S3_ACCESS_KEY: z.string().optional(),
+  S3_SECRET: z.string().optional(),
+
   THROTTLE_LIMIT: z.coerce.number().int().positive().default(100),
 
   // Paiement — Wave Checkout. "mock" par défaut : aucun appel réseau, aucun
@@ -47,7 +57,24 @@ export const envSchema = z.object({
   .refine((e) => e.PAYMENT_GATEWAY !== 'wave' || !!e.WAVE_API_KEY, {
     message: 'WAVE_API_KEY requis lorsque PAYMENT_GATEWAY=wave',
     path: ['WAVE_API_KEY'],
-  });
+  })
+  // Garde-fou : si le stockage est "s3", les variables S3 doivent être présentes.
+  .refine(
+    (e) =>
+      e.STORAGE_DRIVER !== 's3' ||
+      !!(
+        e.S3_ENDPOINT &&
+        e.S3_BUCKET &&
+        e.S3_REGION &&
+        e.S3_ACCESS_KEY &&
+        e.S3_SECRET
+      ),
+    {
+      message:
+        'S3_ENDPOINT, S3_BUCKET, S3_REGION, S3_ACCESS_KEY et S3_SECRET requis lorsque STORAGE_DRIVER=s3',
+      path: ['STORAGE_DRIVER'],
+    },
+  );
 
 export type Env = z.infer<typeof envSchema>;
 
