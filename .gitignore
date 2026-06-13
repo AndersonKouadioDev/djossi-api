@@ -1,0 +1,34 @@
+# Dépendances & build
+node_modules/
+dist/
+build/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Tests / couverture
+coverage/
+.nyc_output/
+
+# Secrets & environnement (NE JAMAIS committer)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Uploads locaux (dev)
+uploads/
+
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp

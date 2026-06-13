@@ -1,0 +1,47 @@
+import { Controller, Get, Query } from '@nestjs/common';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
+import { ServiceCategory } from '@prisma/client';
+import { IsEnum, IsOptional } from 'class-validator';
+import { Public } from '../../common/decorators/public.decorator';
+import { CatalogService, CategoryDto, ServiceItemDto } from './catalog.service';
+
+class ListServicesQuery {
+  @IsOptional()
+  @IsEnum(ServiceCategory, { message: 'Catégorie inconnue.' })
+  category?: ServiceCategory;
+}
+
+@ApiTags('catalog')
+@Controller('services')
+export class CatalogController {
+  constructor(private readonly catalog: CatalogService) {}
+
+  @Public()
+  @Get('categories')
+  @ApiOperation({ summary: 'Les 12 catégories de métiers (label + emoji).' })
+  @ApiOkResponse({
+    schema: {
+      example: [
+        { slug: 'soudeur', label: 'Soudeur', emoji: '🔨', sort_order: 0 },
+      ],
+    },
+  })
+  categories(): Promise<CategoryDto[]> {
+    return this.catalog.categories();
+  }
+
+  @Public()
+  @Get()
+  @ApiOperation({
+    summary: 'Catalogue des libellés de services par catégorie.',
+  })
+  @ApiQuery({ name: 'category', required: false, enum: ServiceCategory })
+  services(@Query() query: ListServicesQuery): Promise<ServiceItemDto[]> {
+    return this.catalog.services(query.category);
+  }
+}

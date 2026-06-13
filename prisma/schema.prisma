@@ -1,0 +1,350 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---------- Enums ----------
+
+enum ServiceCategory {
+  soudeur
+  plombier
+  electricien
+  couturiere
+  commercant
+  coiffeuse
+  mecanicien
+  tacheron
+  macon
+  peintre
+  menuisier
+  chauffeur
+}
+
+enum BookingStatus {
+  pending
+  confirmed
+  in_progress
+  completed
+  cancelled
+}
+
+enum PaymentMethod {
+  orange_money
+  mtn_momo
+  wave
+  cash
+}
+
+enum PaymentStatus {
+  pending
+  completed
+  failed
+}
+
+enum NotificationType {
+  booking
+  message
+  review
+  payment
+  community
+  system
+}
+
+enum ReportStatus {
+  pending
+  reviewed
+  dismissed
+}
+
+enum UserStatus {
+  active
+  warned
+  suspended
+}
+
+// ---------- Modèles ----------
+
+model User {
+  id        String     @id @default(cuid())
+  phone     String     @unique
+  fullName  String     @map("full_name")
+  email     String?
+  avatarUrl String?    @map("avatar_url")
+  quarter   String?
+  lat       Float?
+  lng       Float?
+  status    UserStatus @default(active)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  provider        Provider?
+  refreshTokens   RefreshToken[]
+  bookings        Booking[]      @relation("ClientBookings")
+  reviews         Review[]       @relation("ClientReviews")
+  conversations   Conversation[] @relation("ClientConversations")
+  messages        Message[]
+  payments        Payment[]
+  notifications   Notification[]
+  devices         Device[]
+  reportsAuthored Report[]       @relation("ReportsAuthored")
+  reportsReceived Report[]       @relation("ReportsReceived")
+
+  @@map("users")
+}
+
+model OtpCode {
+  id         String    @id @default(cuid())
+  phone      String
+  codeHash   String    @map("code_hash")
+  expiresAt  DateTime  @map("expires_at")
+  attempts   Int       @default(0)
+  consumedAt DateTime? @map("consumed_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  @@index([phone, createdAt])
+  @@map("otp_codes")
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  userId    String    @map("user_id")
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model Category {
+  slug      ServiceCategory @id
+  labelFr   String          @map("label_fr")
+  emoji     String
+  sortOrder Int             @map("sort_order")
+
+  services Service[]
+
+  @@map("categories")
+}
+
+model Service {
+  id           String          @id @default(cuid())
+  categorySlug ServiceCategory @map("category_slug")
+  label        String
+  sortOrder    Int             @default(0) @map("sort_order")
+
+  category Category @relation(fields: [categorySlug], references: [slug])
+
+  @@unique([categorySlug, label])
+  @@map("services")
+}
+
+model Provider {
+  id                String          @id @default(cuid())
+  userId            String          @unique @map("user_id")
+  category          ServiceCategory
+  trade             String
+  tradeDescription  String?         @map("trade_description")
+  bio               String?
+  workQuarter       String?         @map("work_quarter")
+  workRadius        String          @default("1km") @map("work_radius")
+  hourlyRateMin     Int?            @map("hourly_rate_min")
+  hourlyRateMax     Int?            @map("hourly_rate_max")
+  mobileMoneyNumber String?         @map("mobile_money_number")
+  kycSelfieDone     Boolean         @default(false) @map("kyc_selfie_done")
+  kycCniDone        Boolean         @default(false) @map("kyc_cni_done")
+  isVerified        Boolean         @default(false) @map("is_verified")
+  isPro             Boolean         @default(false) @map("is_pro")
+  ratingAvg         Float           @default(0) @map("rating_avg")
+  ratingCount       Int             @default(0) @map("rating_count")
+  missionsDone      Int             @default(0) @map("missions_done")
+  lat               Float?
+  lng               Float?
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime        @updatedAt @map("updated_at")
+
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  photos        ProviderPhoto[]
+  serviceLabels ProviderService[]
+  bookings      Booking[]
+  reviews       Review[]
+  conversations Conversation[]
+
+  @@index([category])
+  @@index([workQuarter])
+  @@map("providers")
+}
+
+model ProviderPhoto {
+  id         String   @id @default(cuid())
+  providerId String   @map("provider_id")
+  url        String
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  provider Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  @@map("provider_photos")
+}
+
+model ProviderService {
+  id         String @id @default(cuid())
+  providerId String @map("provider_id")
+  label      String
+  sortOrder  Int    @default(0) @map("sort_order")
+
+  provider Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, label])
+  @@map("provider_services")
+}
+
+model Booking {
+  id              String          @id @default(cuid())
+  clientId        String          @map("client_id")
+  providerId      String          @map("provider_id")
+  serviceCategory ServiceCategory @map("service_category")
+  scheduledAt     DateTime        @map("scheduled_at")
+  notes           String?
+  status          BookingStatus   @default(pending)
+  amountFcfa      Int?            @map("amount_fcfa")
+  cancelReason    String?         @map("cancel_reason")
+  completedAt     DateTime?       @map("completed_at")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+
+  client   User      @relation("ClientBookings", fields: [clientId], references: [id])
+  provider Provider  @relation(fields: [providerId], references: [id])
+  review   Review?
+  payments Payment[]
+
+  @@index([clientId, createdAt])
+  @@index([providerId, status])
+  @@map("bookings")
+}
+
+model Conversation {
+  id            String    @id @default(cuid())
+  clientId      String    @map("client_id")
+  providerId    String    @map("provider_id")
+  lastMessage   String?   @map("last_message")
+  lastMessageAt DateTime? @map("last_message_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  client   User      @relation("ClientConversations", fields: [clientId], references: [id])
+  provider Provider  @relation(fields: [providerId], references: [id])
+  messages Message[]
+
+  @@unique([clientId, providerId])
+  @@map("conversations")
+}
+
+model Message {
+  id             String    @id @default(cuid())
+  conversationId String    @map("conversation_id")
+  senderId       String    @map("sender_id")
+  text           String
+  readAt         DateTime? @map("read_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User         @relation(fields: [senderId], references: [id])
+
+  @@index([conversationId, createdAt])
+  @@map("messages")
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  bookingId  String   @unique @map("booking_id")
+  clientId   String   @map("client_id")
+  providerId String   @map("provider_id")
+  rating     Int
+  tags       String[] @default([])
+  comment    String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  booking  Booking  @relation(fields: [bookingId], references: [id])
+  client   User     @relation("ClientReviews", fields: [clientId], references: [id])
+  provider Provider @relation(fields: [providerId], references: [id])
+
+  @@index([providerId, createdAt])
+  @@map("reviews")
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  bookingId     String        @map("booking_id")
+  payerId       String        @map("payer_id")
+  amountFcfa    Int           @map("amount_fcfa")
+  method        PaymentMethod
+  status        PaymentStatus @default(pending)
+  reference     String        @unique
+  phoneNumber   String?       @map("phone_number")
+  failureReason String?       @map("failure_reason")
+  completedAt   DateTime?     @map("completed_at")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+  payer   User    @relation(fields: [payerId], references: [id])
+
+  @@index([payerId, createdAt])
+  @@map("payments")
+}
+
+model Report {
+  id           String       @id @default(cuid())
+  reporterId   String       @map("reporter_id")
+  targetUserId String       @map("target_user_id")
+  bookingId    String?      @map("booking_id")
+  reason       String
+  description  String?
+  status       ReportStatus @default(pending)
+  createdAt    DateTime     @default(now()) @map("created_at")
+
+  reporter User @relation("ReportsAuthored", fields: [reporterId], references: [id])
+  target   User @relation("ReportsReceived", fields: [targetUserId], references: [id])
+
+  @@unique([reporterId, targetUserId, bookingId])
+  @@index([targetUserId])
+  @@map("reports")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String           @map("user_id")
+  type      NotificationType
+  title     String?
+  message   String
+  data      Json?
+  isRead    Boolean          @default(false) @map("is_read")
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+model Device {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  fcmToken   String   @unique @map("fcm_token")
+  platform   String?
+  createdAt  DateTime @default(now()) @map("created_at")
+  lastSeenAt DateTime @default(now()) @map("last_seen_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("devices")
+}
