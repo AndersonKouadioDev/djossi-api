@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { Env, validateEnv } from './core/config/env';
@@ -18,10 +19,12 @@ import { ReportsModule } from './modules/reports/reports.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
 import { SupportModule } from './modules/support/support.module';
 import { UsersModule } from './modules/users/users.module';
+import { RealtimeModule } from './realtime/realtime.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
+    EventEmitterModule.forRoot(),
     ThrottlerModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService<Env, true>) => ({
@@ -43,6 +46,7 @@ import { UsersModule } from './modules/users/users.module';
     ReportsModule,
     SupportModule,
     FavoritesModule,
+    RealtimeModule,
   ],
   controllers: [HealthController],
   providers: [
