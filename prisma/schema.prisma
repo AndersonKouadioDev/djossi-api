@@ -182,6 +182,8 @@ model Provider {
   missionsDone      Int             @default(0) @map("missions_done")
   lat               Float?
   lng               Float?
+  latitude          Float?
+  longitude         Float?
   createdAt         DateTime        @default(now()) @map("created_at")
   updatedAt         DateTime        @updatedAt @map("updated_at")
 

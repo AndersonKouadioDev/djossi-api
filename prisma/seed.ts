@@ -69,6 +69,9 @@ interface ProviderSeed {
   hourlyRateMin: number;
   hourlyRateMax: number;
   services: string[];
+  /** Coordonnées réelles du prestataire pour la carte (quartiers d'Abidjan). */
+  latitude: number;
+  longitude: number;
   /** Notes dont la moyenne tombe exactement sur le rating mocké. */
   ratings: number[];
 }
@@ -91,6 +94,8 @@ const PROVIDERS: ProviderSeed[] = [
     hourlyRateMin: 5000,
     hourlyRateMax: 10000,
     services: ['Portails', 'Grilles de fenêtres', 'Rampes d’escalier'],
+    latitude: 5.3456, // Yopougon
+    longitude: -4.0712,
     ratings: [5, 5, 5, 4, 5], // 4.8
   },
   {
@@ -110,6 +115,8 @@ const PROVIDERS: ProviderSeed[] = [
     hourlyRateMin: 2000,
     hourlyRateMax: 15000,
     services: ['Tenues sur mesure', 'Retouches', 'Pagne traditionnel'],
+    latitude: 5.3573, // Cocody
+    longitude: -3.9954,
     ratings: [5, 5, 5, 5, 5, 5, 5, 5, 5, 4], // 4.9
   },
   {
@@ -129,6 +136,8 @@ const PROVIDERS: ProviderSeed[] = [
     hourlyRateMin: 3000,
     hourlyRateMax: 12000,
     services: ['Fuites d’eau', 'Installation sanitaire', 'Débouchage'],
+    latitude: 5.3001, // Marcory
+    longitude: -3.9902,
     ratings: [5, 5, 5, 5, 5, 5, 5, 4, 4, 4], // 4.7
   },
   {
@@ -148,6 +157,8 @@ const PROVIDERS: ProviderSeed[] = [
     hourlyRateMin: 1500,
     hourlyRateMax: 8000,
     services: ['Tresses', 'Tissages', 'Soins capillaires'],
+    latitude: 5.2935, // Treichville
+    longitude: -4.0048,
     ratings: [5, 4, 5, 4, 5], // 4.6
   },
   {
@@ -167,6 +178,8 @@ const PROVIDERS: ProviderSeed[] = [
     hourlyRateMin: 4000,
     hourlyRateMax: 14000,
     services: ['Installation électrique', 'Dépannage', 'Ventilateurs & climatisation'],
+    latitude: 5.4181, // Abobo
+    longitude: -4.0215,
     ratings: [5, 4, 5, 4], // 4.5
   },
 ];
@@ -283,6 +296,8 @@ export async function seedDatabase(prisma: PrismaClient): Promise<void> {
         missionsDone: p.missionsDone,
         lat: latAt(p.distanceM),
         lng: CLIENT_LNG,
+        latitude: p.latitude,
+        longitude: p.longitude,
         createdAt: new Date('2026-02-15T00:00:00.000Z'),
       },
       update: {
@@ -291,6 +306,8 @@ export async function seedDatabase(prisma: PrismaClient): Promise<void> {
         isVerified: p.isVerified,
         isPro: p.isPro,
         missionsDone: p.missionsDone,
+        latitude: p.latitude,
+        longitude: p.longitude,
       },
     });
 

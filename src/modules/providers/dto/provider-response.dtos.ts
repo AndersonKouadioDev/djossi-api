@@ -32,6 +32,12 @@ export class ProviderSummaryDto {
 
   @ApiPropertyOptional({ nullable: true, example: 'Yopougon Selmer' })
   quarter!: string | null;
+
+  @ApiPropertyOptional({ nullable: true, example: 5.3456 })
+  latitude!: number | null;
+
+  @ApiPropertyOptional({ nullable: true, example: -4.0712 })
+  longitude!: number | null;
 }
 
 export class ProviderDetailDto extends ProviderSummaryDto {

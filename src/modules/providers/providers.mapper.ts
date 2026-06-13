@@ -48,6 +48,8 @@ export function toProviderSummary(
     is_pro: provider.isPro,
     photo_url: provider.user.avatarUrl,
     quarter: provider.workQuarter,
+    latitude: provider.latitude,
+    longitude: provider.longitude,
   };
 }
 
