@@ -9,6 +9,7 @@ import { HealthController } from './health.controller';
 import { AuthModule } from './modules/auth/auth.module';
 import { BookingsModule } from './modules/bookings/bookings.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
+import { FavoritesModule } from './modules/favorites/favorites.module';
 import { MessagingModule } from './modules/messaging/messaging.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { PaymentsModule } from './modules/payments/payments.module';
@@ -41,6 +42,7 @@ import { UsersModule } from './modules/users/users.module';
     PaymentsModule,
     ReportsModule,
     SupportModule,
+    FavoritesModule,
   ],
   controllers: [HealthController],
   providers: [

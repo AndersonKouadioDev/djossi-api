@@ -106,6 +106,7 @@ model User {
   reportsAuthored Report[]       @relation("ReportsAuthored")
   reportsReceived Report[]       @relation("ReportsReceived")
   supportTickets  SupportTicket[]
+  favorites       Favorite[]
 
   @@map("users")
 }
@@ -190,6 +191,7 @@ model Provider {
   bookings      Booking[]
   reviews       Review[]
   conversations Conversation[]
+  favorites     Favorite[]
 
   @@index([category])
   @@index([workQuarter])
@@ -388,4 +390,18 @@ model SupportMessage {
 
   @@index([ticketId, createdAt])
   @@map("support_messages")
+}
+
+model Favorite {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  providerId String   @map("provider_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, providerId])
+  @@index([userId, createdAt])
+  @@map("favorites")
 }
