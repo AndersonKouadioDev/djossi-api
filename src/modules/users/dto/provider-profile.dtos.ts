@@ -109,6 +109,13 @@ export class UpsertProviderProfileDto {
   @IsOptional()
   @IsBoolean()
   kyc_cni_done?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Disponibilité du prestataire pour de nouvelles missions.',
+  })
+  @IsOptional()
+  @IsBoolean()
+  is_available?: boolean;
 }
 
 export class ProviderProfileDto {
@@ -156,6 +163,9 @@ export class ProviderProfileDto {
 
   @ApiProperty()
   is_pro!: boolean;
+
+  @ApiProperty({ example: true })
+  is_available!: boolean;
 
   @ApiProperty({ example: 4.8 })
   rating!: number;

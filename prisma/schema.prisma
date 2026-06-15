@@ -177,6 +177,7 @@ model Provider {
   kycCniDone        Boolean         @default(false) @map("kyc_cni_done")
   isVerified        Boolean         @default(false) @map("is_verified")
   isPro             Boolean         @default(false) @map("is_pro")
+  isAvailable       Boolean         @default(true) @map("is_available")
   ratingAvg         Float           @default(0) @map("rating_avg")
   ratingCount       Int             @default(0) @map("rating_count")
   missionsDone      Int             @default(0) @map("missions_done")

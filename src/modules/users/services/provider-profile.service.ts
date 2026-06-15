@@ -66,6 +66,7 @@ export class ProviderProfileService {
         mobileMoneyNumber: dto.mobile_money_number ?? null,
         kycSelfieDone: dto.kyc_selfie_done ?? false,
         kycCniDone: dto.kyc_cni_done ?? false,
+        isAvailable: dto.is_available ?? true,
         isVerified:
           (dto.kyc_selfie_done ?? false) && (dto.kyc_cni_done ?? false),
         serviceLabels: {
@@ -122,6 +123,7 @@ export class ProviderProfileService {
           hourlyRateMin: dto.hourly_rate_min,
           hourlyRateMax: dto.hourly_rate_max,
           mobileMoneyNumber: dto.mobile_money_number,
+          isAvailable: dto.is_available,
           kycSelfieDone,
           kycCniDone,
           isVerified: kycSelfieDone && kycCniDone,

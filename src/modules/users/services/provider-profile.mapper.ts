@@ -29,6 +29,7 @@ export function toProviderProfileDto(
     kyc_cni_done: provider.kycCniDone,
     is_verified: provider.isVerified,
     is_pro: provider.isPro,
+    is_available: provider.isAvailable,
     rating: round1(provider.ratingAvg),
     reviews_count: provider.ratingCount,
     missions_done: provider.missionsDone,
