@@ -16,17 +16,17 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { BookingStatus } from '@prisma/client';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import type { AuthUser } from '../../common/decorators/current-user.decorator';
-import { Page } from '../../common/dto/page';
-import { ActiveUserGuard } from '../../common/guards/active-user.guard';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { Page } from '../../../common/dto/page';
+import { ActiveUserGuard } from '../../../common/guards/active-user.guard';
 import {
   BookingDto,
   CreateBookingDto,
   ListBookingsQuery,
   UpdateBookingStatusDto,
-} from './dto/booking.dtos';
-import { BookingsService } from './bookings.service';
+} from '../dto/booking.dtos';
+import { BookingsService } from '../services/bookings.service';
 
 @ApiTags('bookings')
 @ApiBearerAuth()

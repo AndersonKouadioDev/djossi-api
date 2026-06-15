@@ -6,19 +6,19 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BookingStatus, Prisma } from '@prisma/client';
-import { AuthUser } from '../../common/decorators/current-user.decorator';
-import { buildPage, Page } from '../../common/dto/page';
-import { PrismaService } from '../../core/prisma/prisma.service';
-import { DomainEvent } from '../../realtime/events/enums/domain-event.enum';
-import type { BookingUpdatedEvent } from '../../realtime/events/realtime-events';
-import { NotificationsService } from '../notifications/services/notifications.service';
+import { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { buildPage, Page } from '../../../common/dto/page';
+import { PrismaService } from '../../../core/prisma/prisma.service';
+import { DomainEvent } from '../../../realtime/events/enums/domain-event.enum';
+import type { BookingUpdatedEvent } from '../../../realtime/events/realtime-events';
+import { NotificationsService } from '../../notifications/services/notifications.service';
 import { assertBookingTransition, BookingRole } from './booking-status.machine';
 import {
   BookingDto,
   CreateBookingDto,
   ListBookingsQuery,
   UpdateBookingStatusDto,
-} from './dto/booking.dtos';
+} from '../dto/booking.dtos';
 
 const BOOKING_INCLUDE = {
   client: { select: { id: true, fullName: true } },
