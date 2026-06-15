@@ -14,18 +14,18 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import type { AuthUser } from '../../common/decorators/current-user.decorator';
-import { Page } from '../../common/dto/page';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
-import { ActiveUserGuard } from '../../common/guards/active-user.guard';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { Page } from '../../../common/dto/page';
+import { PaginationQueryDto } from '../../../common/dto/pagination-query.dto';
+import { ActiveUserGuard } from '../../../common/guards/active-user.guard';
 import {
   ConversationDto,
   CreateConversationDto,
   MessageDto,
   SendMessageDto,
-} from './dto/messaging.dtos';
-import { MessagingService } from './messaging.service';
+} from '../dto/messaging.dtos';
+import { MessagingService } from '../services/messaging.service';
 
 @ApiTags('messaging')
 @ApiBearerAuth()

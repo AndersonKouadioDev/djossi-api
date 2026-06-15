@@ -5,13 +5,13 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Prisma } from '@prisma/client';
-import { AuthUser } from '../../common/decorators/current-user.decorator';
-import { buildPage, Page } from '../../common/dto/page';
-import { PrismaService } from '../../core/prisma/prisma.service';
-import { DomainEvent } from '../../realtime/events/enums/domain-event.enum';
-import type { MessageCreatedEvent } from '../../realtime/events/realtime-events';
-import { NotificationsService } from '../notifications/services/notifications.service';
-import { ConversationDto, MessageDto } from './dto/messaging.dtos';
+import { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { buildPage, Page } from '../../../common/dto/page';
+import { PrismaService } from '../../../core/prisma/prisma.service';
+import { DomainEvent } from '../../../realtime/events/enums/domain-event.enum';
+import type { MessageCreatedEvent } from '../../../realtime/events/realtime-events';
+import { NotificationsService } from '../../notifications/services/notifications.service';
+import { ConversationDto, MessageDto } from '../dto/messaging.dtos';
 
 const CONVERSATION_INCLUDE = {
   client: { select: { id: true, fullName: true, avatarUrl: true } },
