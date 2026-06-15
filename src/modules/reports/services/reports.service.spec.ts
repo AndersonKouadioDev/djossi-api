@@ -1,8 +1,8 @@
 import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { AuthUser } from '../../common/decorators/current-user.decorator';
-import { PrismaService } from '../../core/prisma/prisma.service';
-import { NotificationsService } from '../notifications/services/notifications.service';
+import { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { PrismaService } from '../../../core/prisma/prisma.service';
+import { NotificationsService } from '../../notifications/services/notifications.service';
 import { ReportsService } from './reports.service';
 
 type Mock = jest.Mock;

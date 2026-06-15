@@ -5,11 +5,11 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import type { AuthUser } from '../../common/decorators/current-user.decorator';
-import { ActiveUserGuard } from '../../common/guards/active-user.guard';
-import { CreateReportDto, ReportDto } from './dto/report.dtos';
-import { ReportsService } from './reports.service';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { ActiveUserGuard } from '../../../common/guards/active-user.guard';
+import { CreateReportDto, ReportDto } from '../dto/report.dtos';
+import { ReportsService } from '../services/reports.service';
 
 @ApiTags('reports')
 @ApiBearerAuth()
