@@ -8,8 +8,8 @@ import {
 } from '@nestjs/swagger';
 import { ServiceCategory } from '@prisma/client';
 import { IsEnum, IsOptional } from 'class-validator';
-import { Public } from '../../common/decorators/public.decorator';
-import { CatalogService, CategoryDto, ServiceItemDto } from './catalog.service';
+import { Public } from '../../../common/decorators/public.decorator';
+import { CatalogService, CategoryDto, ServiceItemDto } from '../services/catalog.service';
 
 class ListServicesQuery {
   @IsOptional()
