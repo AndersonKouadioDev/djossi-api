@@ -20,14 +20,14 @@ import {
 } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsOptional } from 'class-validator';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import type { AuthUser } from '../../common/decorators/current-user.decorator';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
-import { NotificationDto, RegisterDeviceDto } from './dto/notification.dtos';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { PaginationQueryDto } from '../../../common/dto/pagination-query.dto';
+import { NotificationDto, RegisterDeviceDto } from '../dto/notification.dtos';
 import {
   NotificationPage,
   NotificationsService,
-} from './notifications.service';
+} from '../services/notifications.service';
 
 class ListNotificationsQuery extends PaginationQueryDto {
   @IsOptional()

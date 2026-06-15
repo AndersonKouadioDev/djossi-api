@@ -10,7 +10,7 @@ import { Prisma } from '@prisma/client';
 import { AuthUser } from '../../common/decorators/current-user.decorator';
 import { buildPage, Page } from '../../common/dto/page';
 import { PrismaService } from '../../core/prisma/prisma.service';
-import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationsService } from '../notifications/services/notifications.service';
 import { CreateReviewDto, ReviewDto } from './dto/review.dtos';
 
 const REVIEW_INCLUDE = {

@@ -10,7 +10,7 @@ import { buildPage, Page } from '../../common/dto/page';
 import { PrismaService } from '../../core/prisma/prisma.service';
 import { DomainEvent } from '../../realtime/events/enums/domain-event.enum';
 import type { MessageCreatedEvent } from '../../realtime/events/realtime-events';
-import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationsService } from '../notifications/services/notifications.service';
 import { ConversationDto, MessageDto } from './dto/messaging.dtos';
 
 const CONVERSATION_INCLUDE = {

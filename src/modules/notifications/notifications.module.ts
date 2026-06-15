@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PushModule } from '../../integrations/push/push.module';
-import { NotificationsController } from './notifications.controller';
-import { NotificationsService } from './notifications.service';
+import { NotificationsController } from './controllers/notifications.controller';
+import { NotificationsService } from './services/notifications.service';
 
 @Module({
   imports: [PushModule],

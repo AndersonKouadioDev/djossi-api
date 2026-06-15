@@ -7,7 +7,7 @@ import {
 import { UserStatus } from '@prisma/client';
 import { AuthUser } from '../../common/decorators/current-user.decorator';
 import { PrismaService } from '../../core/prisma/prisma.service';
-import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationsService } from '../notifications/services/notifications.service';
 import { CreateReportDto, ReportDto } from './dto/report.dtos';
 
 /** Auto-modération (specs DJOSSI) : 2 signalements → avertissement, 3 → suspension. */
