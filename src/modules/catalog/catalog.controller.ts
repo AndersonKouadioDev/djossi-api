@@ -1,4 +1,5 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
+import { Controller, Get, Query, UseInterceptors } from '@nestjs/common';
 import {
   ApiOkResponse,
   ApiOperation,
@@ -23,6 +24,8 @@ export class CatalogController {
 
   @Public()
   @Get('categories')
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(300_000)
   @ApiOperation({ summary: 'Les 12 catégories de métiers (label + emoji).' })
   @ApiOkResponse({
     schema: {

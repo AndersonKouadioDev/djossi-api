@@ -1,8 +1,11 @@
+import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { createKeyv } from '@keyv/redis';
+import { Keyv } from 'keyv';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { RolesGuard } from './common/guards/roles.guard';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
@@ -28,6 +31,15 @@ import { RealtimeModule } from './realtime/realtime.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
     EventEmitterModule.forRoot(),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      inject: [ConfigService],
+      useFactory: (config: ConfigService<Env, true>) => {
+        const url = config.get('REDIS_URL', { infer: true });
+        // REDIS_URL défini → cache distribué Redis (scalable) ; sinon mémoire.
+        return { stores: [url ? createKeyv(url) : new Keyv()] };
+      },
+    }),
     ThrottlerModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService<Env, true>) => ({

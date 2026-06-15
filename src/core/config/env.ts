@@ -41,6 +41,10 @@ export const envSchema = z.object({
   S3_ACCESS_KEY: z.string().optional(),
   S3_SECRET: z.string().optional(),
 
+  // Cache distribué (optionnel) : si défini, cache Redis (scalable) ; sinon
+  // cache mémoire local. Ex : redis://localhost:6379
+  REDIS_URL: z.string().url().optional(),
+
   THROTTLE_LIMIT: z.coerce.number().int().positive().default(100),
 
   // Paiement — Wave Checkout. "mock" par défaut : aucun appel réseau, aucun
