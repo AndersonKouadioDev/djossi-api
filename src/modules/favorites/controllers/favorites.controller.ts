@@ -17,12 +17,12 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import type { AuthUser } from '../../common/decorators/current-user.decorator';
-import { ActiveUserGuard } from '../../common/guards/active-user.guard';
-import { ProviderSummaryDto } from '../providers/dto/provider-response.dtos';
-import { AddFavoriteDto } from './dto/add-favorite.dto';
-import { FavoritesService } from './favorites.service';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { ActiveUserGuard } from '../../../common/guards/active-user.guard';
+import { ProviderSummaryDto } from '../../providers/dto/provider-response.dtos';
+import { AddFavoriteDto } from '../dto/add-favorite.dto';
+import { FavoritesService } from '../services/favorites.service';
 
 @ApiTags('favorites')
 @ApiBearerAuth()
