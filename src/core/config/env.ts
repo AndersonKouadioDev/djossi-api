@@ -27,6 +27,12 @@ export const envSchema = z.object({
   OTP_ACCEPT_DEV_CODE: boolFromString,
   OTP_THROTTLE_DISABLED: boolFromString,
 
+  // SMS réel — Twilio. Si les trois sont présentes, l'OTP part par SMS ;
+  // sinon il est seulement loggé en console (dev/tests).
+  TWILIO_ACCOUNT_SID: z.string().optional(),
+  TWILIO_AUTH_TOKEN: z.string().optional(),
+  TWILIO_SENDER: z.string().optional(),
+
   WEBHOOK_SECRET: z.string().min(1),
   PAYMENT_MOCK_AUTOCOMPLETE_MS: z.coerce.number().int().min(0).default(3000),
   UPLOAD_DIR: z.string().default('./uploads'),
