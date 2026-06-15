@@ -13,12 +13,12 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import type { AuthUser } from '../../common/decorators/current-user.decorator';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
-import { ActiveUserGuard } from '../../common/guards/active-user.guard';
-import { CreateReviewDto, ReviewDto } from './dto/review.dtos';
-import { ProviderReviewsPage, ReviewsService } from './reviews.service';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { PaginationQueryDto } from '../../../common/dto/pagination-query.dto';
+import { ActiveUserGuard } from '../../../common/guards/active-user.guard';
+import { CreateReviewDto, ReviewDto } from '../dto/review.dtos';
+import { ProviderReviewsPage, ReviewsService } from '../services/reviews.service';
 
 @ApiTags('reviews')
 @ApiBearerAuth()
