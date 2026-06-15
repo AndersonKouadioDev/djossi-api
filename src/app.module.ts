@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
+import { RolesGuard } from './common/guards/roles.guard';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { Env, validateEnv } from './core/config/env';
 import { PrismaModule } from './core/prisma/prisma.module';
 import { HealthController } from './health.controller';
@@ -51,7 +54,10 @@ import { RealtimeModule } from './realtime/realtime.module';
   controllers: [HealthController],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },
+    { provide: APP_GUARD, useClass: RolesGuard },
     { provide: APP_FILTER, useClass: PrismaExceptionFilter },
+    { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: TimeoutInterceptor },
   ],
 })
 export class AppModule {}
