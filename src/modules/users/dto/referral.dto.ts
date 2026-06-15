@@ -22,9 +22,8 @@ export class ReferralDto {
 
   @ApiProperty({
     description:
-      'Nombre de filleuls inscrits avec ce code. Toujours 0 pour l’instant : ' +
-      'le suivi des filleuls/récompenses est une évolution produit à venir.',
-    example: 0,
+      'Nombre de filleuls inscrits en saisissant ce code de parrainage.',
+    example: 3,
   })
   invited_count!: number;
 }

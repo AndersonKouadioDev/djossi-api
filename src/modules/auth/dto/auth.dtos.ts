@@ -62,6 +62,19 @@ export class RegisterDto {
   @IsString()
   @MaxLength(80)
   quarter?: string;
+
+  @ApiPropertyOptional({
+    description:
+      'Code de parrainage d’un autre membre (optionnel). Normalisé en MAJUSCULES.',
+    example: 'DJAB12CD34',
+  })
+  @IsOptional()
+  @Transform(({ value }): unknown =>
+    typeof value === 'string' ? value.trim().toUpperCase() : value,
+  )
+  @IsString()
+  @MaxLength(32)
+  referral_code?: string;
 }
 
 export class RefreshDto {

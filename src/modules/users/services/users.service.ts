@@ -67,9 +67,8 @@ export class UsersService {
    * caractères alphanumériques, on prend les 8 premiers en MAJUSCULES et on
    * préfixe « DJ ». Même user → même code, sans migration ni colonne dédiée.
    *
-   * NOTE PRODUIT : `invited_count` est figé à 0. Le suivi des filleuls
-   * (colonne `referred_by`, attribution, récompenses) est une évolution
-   * produit à venir — pas de migration ici.
+   * `invited_count` = nombre d'utilisateurs s'étant inscrits avec ce code
+   * (colonne `referredByCode`, renseignée à l'inscription).
    */
   async referral(userId: string): Promise<ReferralDto> {
     const user = await this.prisma.user.findUnique({
@@ -79,10 +78,13 @@ export class UsersService {
     if (!user) throw new NotFoundException('Compte introuvable.');
 
     const code = buildReferralCode(user.id);
+    const invitedCount = await this.prisma.user.count({
+      where: { referredByCode: code },
+    });
     return {
       code,
       share_message: `Rejoins-moi sur DJOSSI, les talents de ton quartier ! Utilise mon code ${code}.`,
-      invited_count: 0,
+      invited_count: invitedCount,
     };
   }
 }

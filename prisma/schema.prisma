@@ -91,6 +91,10 @@ model User {
   lat       Float?
   lng       Float?
   status    UserStatus @default(active)
+  // Code de parrainage (MAJUSCULES) saisi à l'inscription, s'il y en a un.
+  // Nullable et purement informatif : permet de compter les filleuls d'un
+  // parrain via buildReferralCode(parrainId). Pas de FK (le code est dérivé).
+  referredByCode String? @map("referred_by_code")
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @updatedAt @map("updated_at")
 
@@ -108,6 +112,7 @@ model User {
   supportTickets  SupportTicket[]
   favorites       Favorite[]
 
+  @@index([referredByCode])
   @@map("users")
 }
 

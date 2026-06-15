@@ -54,12 +54,19 @@ export class AuthService {
         'Un compte existe déjà avec ce numéro. Connecte-toi par OTP.',
       );
     }
+    // Code de parrainage optionnel : déjà normalisé en MAJUSCULES par le DTO ;
+    // on ignore une chaîne vide pour ne stocker qu'un code réellement fourni.
+    const referredByCode = dto.referral_code?.trim()
+      ? dto.referral_code.trim()
+      : null;
+
     const user = await this.prisma.user.create({
       data: {
         phone: dto.phone,
         fullName: dto.full_name,
         email: dto.email ?? null,
         quarter: dto.quarter ?? null,
+        referredByCode,
       },
     });
     const pair = await this.tokens.issuePair(user);
