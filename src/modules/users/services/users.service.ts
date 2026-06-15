@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../../core/prisma/prisma.service';
 import { StoragePort } from '../../../integrations/storage/storage.port';
+import { ReferralDto } from '../dto/referral.dto';
 import { UpdateMeDto } from '../dto/update-me.dto';
 import { UserDto } from '../dto/user.dto';
 import { toUserDto } from './users.mapper';
@@ -58,4 +59,36 @@ export class UsersService {
     }
     return { avatar_url: url };
   }
+
+  /**
+   * Parrainage de l'utilisateur connecté.
+   *
+   * Le code est dérivé de façon DÉTERMINISTE de l'id user : on garde les
+   * caractères alphanumériques, on prend les 8 premiers en MAJUSCULES et on
+   * préfixe « DJ ». Même user → même code, sans migration ni colonne dédiée.
+   *
+   * NOTE PRODUIT : `invited_count` est figé à 0. Le suivi des filleuls
+   * (colonne `referred_by`, attribution, récompenses) est une évolution
+   * produit à venir — pas de migration ici.
+   */
+  async referral(userId: string): Promise<ReferralDto> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true },
+    });
+    if (!user) throw new NotFoundException('Compte introuvable.');
+
+    const code = buildReferralCode(user.id);
+    return {
+      code,
+      share_message: `Rejoins-moi sur DJOSSI, les talents de ton quartier ! Utilise mon code ${code}.`,
+      invited_count: 0,
+    };
+  }
+}
+
+/** Code de parrainage stable et lisible dérivé de l'id user (préfixe « DJ »). */
+function buildReferralCode(userId: string): string {
+  const alphanumeric = userId.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+  return `DJ${alphanumeric.slice(0, 8)}`;
 }

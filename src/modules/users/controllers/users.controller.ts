@@ -32,6 +32,7 @@ import {
   ProviderProfileDto,
   UpsertProviderProfileDto,
 } from '../dto/provider-profile.dtos';
+import { ReferralDto } from '../dto/referral.dto';
 import { UpdateMeDto } from '../dto/update-me.dto';
 import { UserDto } from '../dto/user.dto';
 import { ProviderProfileService } from '../services/provider-profile.service';
@@ -94,6 +95,15 @@ export class UsersController {
     @UploadedFile(AVATAR_VALIDATORS) file: Express.Multer.File,
   ): Promise<{ avatar_url: string }> {
     return this.users.setAvatar(user.id, file);
+  }
+
+  @Get('referral')
+  @ApiOperation({
+    summary: 'Code de parrainage et message de partage de l’utilisateur.',
+  })
+  @ApiOkResponse({ type: ReferralDto })
+  referral(@CurrentUser() user: AuthUser): Promise<ReferralDto> {
+    return this.users.referral(user.id);
   }
 
   // ---------- Profil prestataire ----------
