@@ -1,15 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SupportSender } from '@prisma/client';
-import { AuthUser } from '../../common/decorators/current-user.decorator';
-import { PrismaService } from '../../core/prisma/prisma.service';
-import { DomainEvent } from '../../realtime/events/enums/domain-event.enum';
-import type { SupportMessageCreatedEvent } from '../../realtime/events/realtime-events';
+import { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { PrismaService } from '../../../core/prisma/prisma.service';
+import { DomainEvent } from '../../../realtime/events/enums/domain-event.enum';
+import type { SupportMessageCreatedEvent } from '../../../realtime/events/realtime-events';
 import {
   SupportMessageDto,
   SupportTicketDetailDto,
   SupportTicketDto,
-} from './dto/support.dtos';
+} from '../dto/support.dtos';
 
 @Injectable()
 export class SupportService {

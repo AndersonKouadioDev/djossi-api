@@ -6,17 +6,17 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import type { AuthUser } from '../../common/decorators/current-user.decorator';
-import { ActiveUserGuard } from '../../common/guards/active-user.guard';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { ActiveUserGuard } from '../../../common/guards/active-user.guard';
 import {
   CreateTicketDto,
   ReplyTicketDto,
   SupportMessageDto,
   SupportTicketDetailDto,
   SupportTicketDto,
-} from './dto/support.dtos';
-import { SupportService } from './support.service';
+} from '../dto/support.dtos';
+import { SupportService } from '../services/support.service';
 
 @ApiTags('support')
 @ApiBearerAuth()
