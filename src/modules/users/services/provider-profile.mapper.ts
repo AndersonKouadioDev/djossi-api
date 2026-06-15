@@ -1,5 +1,5 @@
 import { Provider, ProviderPhoto, ProviderService } from '@prisma/client';
-import { ProviderProfileDto } from './dto/provider-profile.dtos';
+import { ProviderProfileDto } from '../dto/provider-profile.dtos';
 
 export type ProviderWithRelations = Provider & {
   serviceLabels: ProviderService[];

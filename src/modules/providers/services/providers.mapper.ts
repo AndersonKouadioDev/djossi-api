@@ -1,6 +1,6 @@
 import { Provider, ProviderPhoto, ProviderService, User } from '@prisma/client';
 import { estimateDistanceMeters } from '../../../common/utils/distance.util';
-import { round1 } from '../../users/provider-profile.mapper';
+import { round1 } from '../../users/services/provider-profile.mapper';
 import {
   ProviderDetailDto,
   ProviderSummaryDto,

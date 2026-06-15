@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { UserDto } from './dto/user.dto';
+import { UserDto } from '../dto/user.dto';
 
 type UserWithProviderId = User & { provider?: { id: string } | null };
 

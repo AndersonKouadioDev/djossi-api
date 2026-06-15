@@ -5,12 +5,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from '../../core/prisma/prisma.service';
-import { StoragePort } from '../../integrations/storage/storage.port';
+import { PrismaService } from '../../../core/prisma/prisma.service';
+import { StoragePort } from '../../../integrations/storage/storage.port';
 import {
   ProviderProfileDto,
   UpsertProviderProfileDto,
-} from './dto/provider-profile.dtos';
+} from '../dto/provider-profile.dtos';
 import { toProviderProfileDto } from './provider-profile.mapper';
 
 const MAX_PORTFOLIO_PHOTOS = 12;

@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../core/prisma/prisma.service';
-import { StoragePort } from '../../integrations/storage/storage.port';
-import { UpdateMeDto } from './dto/update-me.dto';
-import { UserDto } from './dto/user.dto';
+import { PrismaService } from '../../../core/prisma/prisma.service';
+import { StoragePort } from '../../../integrations/storage/storage.port';
+import { UpdateMeDto } from '../dto/update-me.dto';
+import { UserDto } from '../dto/user.dto';
 import { toUserDto } from './users.mapper';
 
 @Injectable()

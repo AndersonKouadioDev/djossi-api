@@ -26,16 +26,16 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import type { AuthUser } from '../../common/decorators/current-user.decorator';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { AuthUser } from '../../../common/decorators/current-user.decorator';
 import {
   ProviderProfileDto,
   UpsertProviderProfileDto,
-} from './dto/provider-profile.dtos';
-import { UpdateMeDto } from './dto/update-me.dto';
-import { UserDto } from './dto/user.dto';
-import { ProviderProfileService } from './provider-profile.service';
-import { UsersService } from './users.service';
+} from '../dto/provider-profile.dtos';
+import { UpdateMeDto } from '../dto/update-me.dto';
+import { UserDto } from '../dto/user.dto';
+import { ProviderProfileService } from '../services/provider-profile.service';
+import { UsersService } from '../services/users.service';
 
 const AVATAR_VALIDATORS = new ParseFilePipe({
   validators: [
