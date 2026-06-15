@@ -9,7 +9,12 @@ import {
 import { ServiceCategory } from '@prisma/client';
 import { IsEnum, IsOptional } from 'class-validator';
 import { Public } from '../../../common/decorators/public.decorator';
-import { CatalogService, CategoryDto, ServiceItemDto } from '../services/catalog.service';
+import {
+  CatalogService,
+  CategoryDto,
+  QuarterDto,
+  ServiceItemDto,
+} from '../services/catalog.service';
 
 class ListServicesQuery {
   @IsOptional()
@@ -36,6 +41,26 @@ export class CatalogController {
   })
   categories(): Promise<CategoryDto[]> {
     return this.catalog.categories();
+  }
+
+  @Public()
+  @Get('quarters')
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(3_600_000)
+  @ApiOperation({
+    summary:
+      'Quartiers de référence d’Abidjan (source de vérité, triés par nom).',
+  })
+  @ApiOkResponse({
+    schema: {
+      example: [
+        { slug: 'yopougon', name: 'Yopougon' },
+        { slug: 'yopougon-selmer', name: 'Yopougon Selmer' },
+      ],
+    },
+  })
+  quarters(): QuarterDto[] {
+    return this.catalog.quarters();
   }
 
   @Public()
