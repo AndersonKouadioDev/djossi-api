@@ -1,10 +1,10 @@
 import { Provider, ProviderPhoto, ProviderService, User } from '@prisma/client';
-import { estimateDistanceMeters } from '../../common/utils/distance.util';
-import { round1 } from '../users/provider-profile.mapper';
+import { estimateDistanceMeters } from '../../../common/utils/distance.util';
+import { round1 } from '../../users/provider-profile.mapper';
 import {
   ProviderDetailDto,
   ProviderSummaryDto,
-} from './dto/provider-response.dtos';
+} from '../dto/provider-response.dtos';
 
 export interface Viewer {
   quarter?: string | null;

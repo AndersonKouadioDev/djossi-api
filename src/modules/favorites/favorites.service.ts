@@ -5,7 +5,7 @@ import {
 import { AuthUser } from '../../common/decorators/current-user.decorator';
 import { PrismaService } from '../../core/prisma/prisma.service';
 import { ProviderSummaryDto } from '../providers/dto/provider-response.dtos';
-import { toProviderSummary } from '../providers/providers.mapper';
+import { toProviderSummary } from '../providers/services/providers.mapper';
 
 @Injectable()
 export class FavoritesService {
