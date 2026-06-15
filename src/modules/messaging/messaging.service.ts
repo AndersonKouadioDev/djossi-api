@@ -3,10 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Prisma } from '@prisma/client';
 import { AuthUser } from '../../common/decorators/current-user.decorator';
 import { buildPage, Page } from '../../common/dto/page';
 import { PrismaService } from '../../core/prisma/prisma.service';
+import { DomainEvent } from '../../realtime/events/enums/domain-event.enum';
+import type { MessageCreatedEvent } from '../../realtime/events/realtime-events';
 import { NotificationsService } from '../notifications/notifications.service';
 import { ConversationDto, MessageDto } from './dto/messaging.dtos';
 
@@ -30,6 +33,7 @@ export class MessagingService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
+    private readonly events: EventEmitter2,
   ) {}
 
   /** Crée (ou retrouve, idempotent) la conversation avec un prestataire. */
@@ -135,6 +139,12 @@ export class MessagingService {
       conversation.clientId === user.id
         ? conversation.provider.userId
         : conversation.clientId;
+    this.events.emit(DomainEvent.MESSAGE_CREATED, {
+      message_id: message.id,
+      conversation_id: conversationId,
+      sender_id: user.id,
+      recipients: [recipientId],
+    } satisfies MessageCreatedEvent);
     await this.notifications.notify(
       recipientId,
       'message',

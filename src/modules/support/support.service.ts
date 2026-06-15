@@ -1,7 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SupportSender } from '@prisma/client';
 import { AuthUser } from '../../common/decorators/current-user.decorator';
 import { PrismaService } from '../../core/prisma/prisma.service';
+import { DomainEvent } from '../../realtime/events/enums/domain-event.enum';
+import type { SupportMessageCreatedEvent } from '../../realtime/events/realtime-events';
 import {
   SupportMessageDto,
   SupportTicketDetailDto,
@@ -10,7 +13,10 @@ import {
 
 @Injectable()
 export class SupportService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly events: EventEmitter2,
+  ) {}
 
   /** Crée un ticket avec son premier message (sender=user). */
   async createTicket(
@@ -26,8 +32,16 @@ export class SupportService {
       },
       include: { messages: { orderBy: { createdAt: 'asc' } } },
     });
+    const firstMessage = ticket.messages.at(-1) ?? null;
+    if (firstMessage) {
+      this.events.emit(DomainEvent.SUPPORT_MESSAGE_CREATED, {
+        message_id: firstMessage.id,
+        ticket_id: ticket.id,
+        recipients: [user.id],
+      } satisfies SupportMessageCreatedEvent);
+    }
     return {
-      ...toTicketDto(ticket, ticket.messages.at(-1) ?? null),
+      ...toTicketDto(ticket, firstMessage),
       messages: ticket.messages.map(toMessageDto),
     };
   }
@@ -91,6 +105,12 @@ export class SupportService {
         },
       }),
     ]);
+
+    this.events.emit(DomainEvent.SUPPORT_MESSAGE_CREATED, {
+      message_id: message.id,
+      ticket_id: ticketId,
+      recipients: [ticket.userId],
+    } satisfies SupportMessageCreatedEvent);
 
     return toMessageDto(message);
   }

@@ -1,7 +1,10 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { NotificationType, Prisma } from '@prisma/client';
 import { buildPage, Page } from '../../common/dto/page';
 import { PrismaService } from '../../core/prisma/prisma.service';
+import { DomainEvent } from '../../realtime/events/enums/domain-event.enum';
+import type { NotificationCreatedEvent } from '../../realtime/events/realtime-events';
 import { PushPort } from '../../integrations/push/push.port';
 import { NotificationDto } from './dto/notification.dtos';
 
@@ -21,6 +24,7 @@ export class NotificationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly push: PushPort,
+    private readonly events: EventEmitter2,
   ) {}
 
   /**
@@ -34,7 +38,7 @@ export class NotificationsService {
     options: NotifyOptions = {},
   ): Promise<void> {
     try {
-      await this.prisma.notification.create({
+      const notification = await this.prisma.notification.create({
         data: {
           userId,
           type,
@@ -45,6 +49,10 @@ export class NotificationsService {
             | undefined,
         },
       });
+      this.events.emit(DomainEvent.NOTIFICATION_CREATED, {
+        notification_id: notification.id,
+        recipients: [userId],
+      } satisfies NotificationCreatedEvent);
       await this.push.sendToUser(userId, {
         title: options.title,
         body: message,

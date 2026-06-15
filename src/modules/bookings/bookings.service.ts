@@ -4,10 +4,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BookingStatus, Prisma } from '@prisma/client';
 import { AuthUser } from '../../common/decorators/current-user.decorator';
 import { buildPage, Page } from '../../common/dto/page';
 import { PrismaService } from '../../core/prisma/prisma.service';
+import { DomainEvent } from '../../realtime/events/enums/domain-event.enum';
+import type { BookingUpdatedEvent } from '../../realtime/events/realtime-events';
 import { NotificationsService } from '../notifications/notifications.service';
 import { assertBookingTransition, BookingRole } from './booking-status.machine';
 import {
@@ -36,6 +39,7 @@ export class BookingsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
+    private readonly events: EventEmitter2,
   ) {}
 
   async create(user: AuthUser, dto: CreateBookingDto): Promise<BookingDto> {
@@ -72,6 +76,11 @@ export class BookingsService {
       `Nouvelle demande de réservation de ${user.fullName}.`,
       { title: 'Nouvelle demande', data: { booking_id: booking.id } },
     );
+    this.events.emit(DomainEvent.BOOKING_UPDATED, {
+      booking_id: booking.id,
+      status: booking.status,
+      recipients: [provider.userId, user.id],
+    } satisfies BookingUpdatedEvent);
     return toBookingDto(booking);
   }
 
@@ -154,6 +163,11 @@ export class BookingsService {
     }
 
     await this.notifyTransition(updated, role);
+    this.events.emit(DomainEvent.BOOKING_UPDATED, {
+      booking_id: updated.id,
+      status: updated.status,
+      recipients: [updated.clientId, updated.provider.userId],
+    } satisfies BookingUpdatedEvent);
     return toBookingDto(updated);
   }
 
