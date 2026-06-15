@@ -9,19 +9,19 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Payment } from '@prisma/client';
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
-import { AuthUser } from '../../common/decorators/current-user.decorator';
-import { buildPage, Page } from '../../common/dto/page';
-import { Env } from '../../core/config/env';
-import { PrismaService } from '../../core/prisma/prisma.service';
-import { PaymentGatewayPort } from '../../integrations/payments-gateway/payment-gateway.port';
-import { NotificationsService } from '../notifications/services/notifications.service';
+import { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { buildPage, Page } from '../../../common/dto/page';
+import { Env } from '../../../core/config/env';
+import { PrismaService } from '../../../core/prisma/prisma.service';
+import { PaymentGatewayPort } from '../../../integrations/payments-gateway/payment-gateway.port';
+import { NotificationsService } from '../../notifications/services/notifications.service';
 import {
   CheckoutDepositDto,
   CheckoutSessionDto,
   InitPaymentDto,
   PaymentCallbackDto,
   PaymentDto,
-} from './dto/payment.dtos';
+} from '../dto/payment.dtos';
 
 /** Forme minimale d'un événement webhook Wave. */
 interface WaveWebhookEvent {

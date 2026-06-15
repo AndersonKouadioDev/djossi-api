@@ -23,20 +23,20 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import type { Request } from 'express';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import type { AuthUser } from '../../common/decorators/current-user.decorator';
-import { Public } from '../../common/decorators/public.decorator';
-import { Page } from '../../common/dto/page';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
-import { ActiveUserGuard } from '../../common/guards/active-user.guard';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { Public } from '../../../common/decorators/public.decorator';
+import { Page } from '../../../common/dto/page';
+import { PaginationQueryDto } from '../../../common/dto/pagination-query.dto';
+import { ActiveUserGuard } from '../../../common/guards/active-user.guard';
 import {
   CheckoutDepositDto,
   CheckoutSessionDto,
   InitPaymentDto,
   PaymentCallbackDto,
   PaymentDto,
-} from './dto/payment.dtos';
-import { PaymentsService } from './payments.service';
+} from '../dto/payment.dtos';
+import { PaymentsService } from '../services/payments.service';
 
 /** Échappe le HTML pour l'injection dans la page de paiement factice. */
 function escapeHtml(s: string): string {

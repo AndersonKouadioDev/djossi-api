@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { PaymentsGatewayModule } from '../../integrations/payments-gateway/payments-gateway.module';
 import { NotificationsModule } from '../notifications/notifications.module';
-import { PaymentsController } from './payments.controller';
-import { PaymentsService } from './payments.service';
+import { PaymentsController } from './controllers/payments.controller';
+import { PaymentsService } from './services/payments.service';
 
 @Module({
   imports: [PaymentsGatewayModule, NotificationsModule],
