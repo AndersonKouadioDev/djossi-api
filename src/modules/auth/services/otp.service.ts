@@ -5,10 +5,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { randomOtpCode, sha256 } from '../../common/utils/hash.util';
-import { Env } from '../../core/config/env';
-import { PrismaService } from '../../core/prisma/prisma.service';
-import { SmsPort } from '../../integrations/sms/sms.port';
+import { randomOtpCode, sha256 } from '../../../common/utils/hash.util';
+import { Env } from '../../../core/config/env';
+import { PrismaService } from '../../../core/prisma/prisma.service';
+import { SmsPort } from '../../../integrations/sms/sms.port';
 
 /** Code accepté en dev quand OTP_ACCEPT_DEV_CODE=true — celui du mock Flutter. */
 const DEV_CODE = '123456';

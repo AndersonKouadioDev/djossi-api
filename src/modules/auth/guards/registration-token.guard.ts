@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { normalizePhone } from '../../../common/utils/phone.util';
-import { TokenService } from '../token.service';
+import { TokenService } from '../services/token.service';
 
 /**
  * Protège POST /auth/register : exige un registration_token (Bearer) émis par

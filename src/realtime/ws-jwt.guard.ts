@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { WsException } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
-import { AccessPayload } from '../modules/auth/token.service';
+import { AccessPayload } from '../modules/auth/services/token.service';
 
 /** Socket authentifié : son user id est attaché par le WsJwtGuard. */
 export interface AuthSocket extends Socket {

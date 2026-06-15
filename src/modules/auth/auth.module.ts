@@ -6,12 +6,12 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { Env } from '../../core/config/env';
 import { SmsModule } from '../../integrations/sms/sms.module';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { AuthController } from './controllers/auth.controller';
+import { AuthService } from './services/auth.service';
 import { RegistrationTokenGuard } from './guards/registration-token.guard';
-import { OtpService } from './otp.service';
+import { OtpService } from './services/otp.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { TokenService } from './token.service';
+import { TokenService } from './services/token.service';
 
 @Module({
   imports: [

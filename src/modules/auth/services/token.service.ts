@@ -2,9 +2,9 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { User } from '@prisma/client';
-import { randomToken, sha256 } from '../../common/utils/hash.util';
-import { Env } from '../../core/config/env';
-import { PrismaService } from '../../core/prisma/prisma.service';
+import { randomToken, sha256 } from '../../../common/utils/hash.util';
+import { Env } from '../../../core/config/env';
+import { PrismaService } from '../../../core/prisma/prisma.service';
 
 export interface TokenPair {
   access_token: string;

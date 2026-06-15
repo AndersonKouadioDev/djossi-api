@@ -1,12 +1,12 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { PrismaService } from '../../core/prisma/prisma.service';
-import { toUserDto } from '../users/services/users.mapper';
+import { PrismaService } from '../../../core/prisma/prisma.service';
+import { toUserDto } from '../../users/services/users.mapper';
 import {
   AuthSessionDto,
   RegisterDto,
   SendOtpResponseDto,
   VerifyOtpResponseDto,
-} from './dto/auth.dtos';
+} from '../dto/auth.dtos';
 import { OtpService } from './otp.service';
 import { TokenService } from './token.service';
 

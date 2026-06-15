@@ -2,8 +2,8 @@ import { UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
-import { sha256 } from '../../common/utils/hash.util';
-import { PrismaService } from '../../core/prisma/prisma.service';
+import { sha256 } from '../../../common/utils/hash.util';
+import { PrismaService } from '../../../core/prisma/prisma.service';
 import { TokenService } from './token.service';
 
 type Mock = jest.Mock;

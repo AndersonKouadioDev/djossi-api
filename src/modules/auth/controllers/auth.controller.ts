@@ -14,9 +14,9 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import type { AuthUser } from '../../common/decorators/current-user.decorator';
-import { Public } from '../../common/decorators/public.decorator';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { AuthUser } from '../../../common/decorators/current-user.decorator';
+import { Public } from '../../../common/decorators/public.decorator';
 import {
   AuthSessionDto,
   LogoutDto,
@@ -27,10 +27,10 @@ import {
   TokenPairDto,
   VerifyOtpDto,
   VerifyOtpResponseDto,
-} from './dto/auth.dtos';
-import { AuthService } from './auth.service';
-import { RegistrationTokenGuard } from './guards/registration-token.guard';
-import { TokenService } from './token.service';
+} from '../dto/auth.dtos';
+import { AuthService } from '../services/auth.service';
+import { RegistrationTokenGuard } from '../guards/registration-token.guard';
+import { TokenService } from '../services/token.service';
 
 @ApiTags('auth')
 @Controller('auth')
