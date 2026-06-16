@@ -52,12 +52,27 @@ export class ProviderProfileService {
       );
     }
 
+    // Le prestataire démarre avec l'identité du compte client (User), puis
+    // pourra la modifier sans toucher au compte. Si le client ne fournit pas
+    // ces champs à l'onboarding, on copie les valeurs par défaut du User.
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { fullName: true, avatarUrl: true, phone: true },
+    });
+    if (!user) {
+      throw new NotFoundException('Compte introuvable.');
+    }
+
     const provider = await this.prisma.provider.create({
       data: {
         userId,
         category: dto.category,
         trade: dto.trade,
         tradeDescription: dto.trade_description ?? null,
+        displayName: dto.display_name ?? user.fullName,
+        avatarUrl: user.avatarUrl,
+        contactPhone: dto.contact_phone ?? user.phone,
+        city: dto.city ?? null,
         bio: dto.bio ?? null,
         workQuarter: dto.work_quarter ?? null,
         workRadius: dto.work_radius ?? '1km',
@@ -117,6 +132,11 @@ export class ProviderProfileService {
           category: dto.category,
           trade: dto.trade,
           tradeDescription: dto.trade_description,
+          // Identité propre au prestataire : ces écritures ne touchent QUE le
+          // Provider, jamais le compte client (User).
+          displayName: dto.display_name,
+          contactPhone: dto.contact_phone,
+          city: dto.city,
           bio: dto.bio,
           workQuarter: dto.work_quarter,
           workRadius: dto.work_radius,
@@ -132,6 +152,37 @@ export class ProviderProfileService {
       });
     });
     return toProviderProfileDto(provider);
+  }
+
+  /**
+   * Upload l'avatar PROPRE du prestataire (même mécanisme que l'avatar client :
+   * stockage local sur /uploads/avatars). N'écrit que `provider.avatarUrl`,
+   * jamais `user.avatarUrl`.
+   */
+  async setAvatar(
+    userId: string,
+    file: Express.Multer.File,
+  ): Promise<ProviderProfileDto> {
+    const current = await this.prisma.provider.findUnique({
+      where: { userId },
+      select: { id: true, avatarUrl: true },
+    });
+    if (!current) {
+      throw new NotFoundException('Pas encore de profil prestataire.');
+    }
+
+    const { url } = await this.storage.save(file.buffer, {
+      folder: 'avatars',
+      mime: file.mimetype,
+    });
+    await this.prisma.provider.update({
+      where: { id: current.id },
+      data: { avatarUrl: url },
+    });
+    if (current.avatarUrl) {
+      await this.storage.delete(current.avatarUrl);
+    }
+    return this.getMine(userId);
   }
 
   async addPortfolioPhotos(

@@ -37,6 +37,10 @@ export class ProvidersService {
     const text = query.query?.trim();
     const where: Prisma.ProviderWhereInput = {
       user: { status: { not: 'suspended' } },
+      // Un prestataire ne doit jamais se voir lui-même dans la liste/recherche.
+      // Exclusion conditionnelle : seulement si un utilisateur est authentifié
+      // (viewer optionnel), pour rester correct si la route devenait publique.
+      ...(viewer.id ? { userId: { not: viewer.id } } : {}),
       ...(query.category ? { category: query.category } : {}),
       ...(query.quarter
         ? {

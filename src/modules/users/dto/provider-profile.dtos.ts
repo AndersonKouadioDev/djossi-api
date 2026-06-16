@@ -60,6 +60,31 @@ export class UpsertProviderProfileDto {
   @MaxLength(80)
   work_quarter?: string;
 
+  @ApiPropertyOptional({
+    example: 'Kouame Soudure',
+    description:
+      'Nom affiché du prestataire. Indépendant du nom du compte client.',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(80)
+  display_name?: string;
+
+  @ApiPropertyOptional({
+    example: '0707070707',
+    description: 'Téléphone de contact public du prestataire.',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  contact_phone?: string;
+
+  @ApiPropertyOptional({ example: 'Abidjan' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(80)
+  city?: string;
+
   @ApiPropertyOptional({ enum: WORK_RADII, example: '1km' })
   @IsOptional()
   @IsIn(WORK_RADII, { message: 'Rayon de travail invalide.' })
@@ -139,6 +164,18 @@ export class ProviderProfileDto {
 
   @ApiPropertyOptional({ nullable: true })
   work_quarter!: string | null;
+
+  @ApiPropertyOptional({ nullable: true, example: 'Kouame Soudure' })
+  display_name!: string | null;
+
+  @ApiPropertyOptional({ nullable: true, example: 'http://…/uploads/avatars/x.jpg' })
+  avatar_url!: string | null;
+
+  @ApiPropertyOptional({ nullable: true, example: '0707070707' })
+  contact_phone!: string | null;
+
+  @ApiPropertyOptional({ nullable: true, example: 'Abidjan' })
+  city!: string | null;
 
   @ApiProperty({ example: '1km' })
   work_radius!: string;

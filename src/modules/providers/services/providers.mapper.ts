@@ -7,6 +7,8 @@ import {
 } from '../dto/provider-response.dtos';
 
 export interface Viewer {
+  /** id du compte qui consulte — sert à l'exclure de sa propre liste. */
+  id?: string | null;
   quarter?: string | null;
   lat?: number | null;
   lng?: number | null;
@@ -25,9 +27,14 @@ export function toProviderSummary(
   provider: ProviderWithUser,
   viewer: Viewer,
 ): ProviderSummaryDto {
+  // Identité affichée : on privilégie l'identité PROPRE du prestataire
+  // (displayName/avatarUrl) et on retombe sur celle du compte client si absente.
+  const displayName = provider.displayName ?? provider.user.fullName;
+  const photoUrl = provider.avatarUrl ?? provider.user.avatarUrl;
   return {
     id: provider.id,
-    full_name: provider.user.fullName,
+    full_name: displayName,
+    display_name: displayName,
     category: provider.category,
     distance_meters: estimateDistanceMeters({
       viewer: {
@@ -46,7 +53,10 @@ export function toProviderSummary(
     missions_done: provider.missionsDone,
     is_verified: provider.isVerified,
     is_pro: provider.isPro,
-    photo_url: provider.user.avatarUrl,
+    photo_url: photoUrl,
+    avatar_url: photoUrl,
+    contact_phone: provider.contactPhone,
+    city: provider.city,
     quarter: provider.workQuarter,
     latitude: provider.latitude,
     longitude: provider.longitude,

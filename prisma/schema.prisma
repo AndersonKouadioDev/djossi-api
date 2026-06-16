@@ -172,6 +172,13 @@ model Provider {
   category          ServiceCategory
   trade             String
   tradeDescription  String?         @map("trade_description")
+  // Identité propre du prestataire, indépendante du compte client (User).
+  // Nullable : à la création on copie les valeurs du User par défaut, mais le
+  // prestataire peut ensuite les modifier sans toucher à son compte client.
+  displayName       String?         @map("display_name")
+  avatarUrl         String?         @map("avatar_url")
+  contactPhone      String?         @map("contact_phone")
+  city              String?
   bio               String?
   workQuarter       String?         @map("work_quarter")
   workRadius        String          @default("1km") @map("work_radius")

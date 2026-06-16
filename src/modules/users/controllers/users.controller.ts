@@ -137,6 +137,29 @@ export class UsersController {
     return this.providerProfile.update(user.id, dto);
   }
 
+  @Post('provider/avatar')
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
+  @ApiOperation({
+    summary:
+      'Upload la photo PROPRE du prestataire (jpeg/png/webp, 5 Mo max). ' +
+      'Ne touche pas la photo du compte client.',
+  })
+  @ApiOkResponse({ type: ProviderProfileDto })
+  uploadProviderAvatar(
+    @CurrentUser() user: AuthUser,
+    @UploadedFile(AVATAR_VALIDATORS) file: Express.Multer.File,
+  ): Promise<ProviderProfileDto> {
+    return this.providerProfile.setAvatar(user.id, file);
+  }
+
   @Post('provider/portfolio')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FilesInterceptor('files', 6))

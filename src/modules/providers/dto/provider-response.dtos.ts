@@ -9,6 +9,9 @@ export class ProviderSummaryDto {
   @ApiProperty({ example: 'Kouame Yao' })
   full_name!: string;
 
+  @ApiPropertyOptional({ nullable: true, example: 'Kouame Soudure' })
+  display_name!: string | null;
+
   @ApiProperty({ enum: ServiceCategory, example: 'soudeur' })
   category!: ServiceCategory;
 
@@ -29,6 +32,15 @@ export class ProviderSummaryDto {
 
   @ApiPropertyOptional({ nullable: true })
   photo_url!: string | null;
+
+  @ApiPropertyOptional({ nullable: true })
+  avatar_url!: string | null;
+
+  @ApiPropertyOptional({ nullable: true, example: '0707070707' })
+  contact_phone!: string | null;
+
+  @ApiPropertyOptional({ nullable: true, example: 'Abidjan' })
+  city!: string | null;
 
   @ApiPropertyOptional({ nullable: true, example: 'Yopougon Selmer' })
   quarter!: string | null;
